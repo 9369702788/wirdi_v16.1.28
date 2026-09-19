@@ -19,7 +19,6 @@ import '../../features/quran/quran_screen.dart';
 import '../../features/azkar/azkar_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/radio/radio_screen.dart';
-import 'wirdi_brand.dart';
 
 class _WirdiNavItem extends StatelessWidget {
   final String label;
