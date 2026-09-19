@@ -35,7 +35,6 @@ import '../qibla/qibla_screen.dart';
 import '../quran/quran_screen.dart';
 import '../ramadan/ramadan_companion_screen.dart';
 import '../settings/settings_screen.dart';
-import '../tasbeeh/tasbeeh_screen.dart';
 import '../tools/islamic_tools_screen.dart';
 import '../wird/my_wirdi_screen.dart';
 import '../../shared/widgets/wirdi_brand.dart';
@@ -904,36 +903,6 @@ class _WeekSummaryCard extends StatelessWidget {
               style: const TextStyle(color: AppColors.mutedText, fontSize: 12),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _QuickAction extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  const _QuickAction({required this.icon, required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.primaryEmerald.withValues(alpha: 0.08),
-      borderRadius: BorderRadius.circular(18),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(18),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              Icon(icon, color: AppColors.primaryEmerald),
-              const SizedBox(height: 6),
-              Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-            ],
-          ),
         ),
       ),
     );

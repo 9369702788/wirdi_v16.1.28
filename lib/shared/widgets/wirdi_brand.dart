@@ -13,7 +13,7 @@ class WirdiBrandBackground extends StatelessWidget {
 
   const WirdiBrandBackground({
     super.key,
-    required this.child,
+    this.child = const SizedBox.shrink(),
     this.asset,
     this.imageOpacity = 0.18,
     this.imageHeight = 330,
