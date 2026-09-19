@@ -101,10 +101,10 @@ class AppTheme {
       },
       primary: Color(0xFF0F766E),
       accent: Color(0xFFD4AF37),
-      lightBackground: Color(0xFFF8F9F6),
+      lightBackground: Color(0xFFF7F4EA),
       darkBackground: Color(0xFF071A17),
       darkCard: Color(0xFF102925),
-      cardRadius: 20,
+      cardRadius: 24,
     ),
     AppColorTheme.ocean: AppThemeDefinition(
       displayNameByLocale: {
@@ -249,10 +249,11 @@ class AppTheme {
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800),
       ),
       cardTheme: base.cardTheme.copyWith(
         color: Colors.white,
-        elevation: 2,
+        elevation: 1.5,
         shadowColor: Colors.black.withValues(alpha: 0.08),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(def.cardRadius),
@@ -275,7 +276,7 @@ class AppTheme {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
           ),
           textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
         ),

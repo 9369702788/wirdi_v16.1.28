@@ -83,7 +83,7 @@ class _RadioScreenState extends State<RadioScreen>
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        flexibleSpace: _MosaicBg(col: 3, row: 1, opacity: 0.45),
+        flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/radio_hero_v4.jpg'),
         title: _searching
             ? TextField(
                 controller: _searchController,
@@ -163,9 +163,9 @@ class _RadioScreenState extends State<RadioScreen>
               ),
       ),
       body: WirdiBrandBackground(
-        asset: 'assets/images/ui/kaaba_night.jpg',
-        imageOpacity: 0.10,
-        imageHeight: 300,
+        asset: 'assets/images/ui/radio_hero_v4.jpg',
+        imageOpacity: 0.84,
+        imageHeight: 460,
         darken: true,
         child: ListenableBuilder(
         listenable: RadioService.instance,
@@ -174,6 +174,7 @@ class _RadioScreenState extends State<RadioScreen>
           final stations = svc.allStations;
 
           return Column(children: [
+            WirdiScenicHero(asset:'assets/images/ui/radio_hero_v4.jpg',title:l.radioTitle,subtitle:l.radioAll,height:150),
             // Error banner
             if (svc.state == RadioState.error && svc.errorMessage != null)
               Container(

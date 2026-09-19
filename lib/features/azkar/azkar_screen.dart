@@ -54,7 +54,7 @@ class _AzkarScreenState extends State<AzkarScreen> with SingleTickerProviderStat
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        flexibleSpace: _MosaicBg(col: 2, row: 1, opacity: 0.4),
+        flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/azkar_hero_v4.jpg'),
         title: Text(l10n.azkarDuasTitle),
         centerTitle: true,
         bottom: TabBar(
@@ -85,9 +85,9 @@ class _AzkarScreenState extends State<AzkarScreen> with SingleTickerProviderStat
         children: [
           const Positioned.fill(
             child: WirdiBrandBackground(
-              asset: 'assets/images/ui/mosque_sunset.jpg',
-              imageOpacity: 0.12,
-              imageHeight: 330,
+              asset: 'assets/images/ui/azkar_hero_v4.jpg',
+              imageOpacity: 0.84,
+              imageHeight: 460,
             ),
           ),
           Positioned(
@@ -99,7 +99,9 @@ class _AzkarScreenState extends State<AzkarScreen> with SingleTickerProviderStat
               child: _MosaicBg(col: 2, row: 1, opacity: 0.10),
             ),
           ),
-          SafeArea(bottom: true, top: false, child: FutureBuilder<List<AzkarCategoryModel>>(
+          Column(children:[
+            WirdiScenicHero(asset:'assets/images/ui/azkar_hero_v4.jpg',title:l10n.azkarDuasTitle,subtitle:l10n.azkarTabAzkar,height:150),
+            Expanded(child: SafeArea(bottom: true, top: false, child: FutureBuilder<List<AzkarCategoryModel>>(
             future: _future,
             builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -126,7 +128,9 @@ class _AzkarScreenState extends State<AzkarScreen> with SingleTickerProviderStat
                 ],
               );
             },
-          )),
+          }))),
+          ],
+        ),
         ],
       ),
     );

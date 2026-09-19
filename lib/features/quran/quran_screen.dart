@@ -91,7 +91,7 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        flexibleSpace: _MosaicBg(col: 3, row: 0, opacity: 0.4),
+        flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/quran_hero_v4.jpg'),
         title: Directionality(textDirection: TextDirection.rtl, child: Text(l10n.quranTitle)),
         centerTitle: true,
         actions: [
@@ -118,10 +118,13 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
         ),
       ),
       body: WirdiBrandBackground(
-        asset: 'assets/images/ui/quran_mosque.jpg',
-        imageOpacity: 0.13,
-        imageHeight: 300,
-        child: FutureBuilder<List<SurahModel>>(
+        asset: 'assets/images/ui/quran_hero_v4.jpg',
+        imageOpacity: 0.84,
+        imageHeight: 500,
+        child: Column(
+          children: [
+            WirdiScenicHero(asset: 'assets/images/ui/quran_hero_v4.jpg', title: l10n.quranTitle, subtitle: l10n.quranViewMushaf, height: 150),
+            Expanded(child: FutureBuilder<List<SurahModel>>(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -149,7 +152,9 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
             ],
           );
         },
-      ),
+      )),
+          ],
+        ),
       ),
     );
   }

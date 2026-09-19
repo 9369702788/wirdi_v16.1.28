@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/generated/mosque_sunrise.png',
+              'assets/images/ui/splash_hero_v4.jpg',
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
             ),

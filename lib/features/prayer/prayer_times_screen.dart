@@ -350,7 +350,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        flexibleSpace: _MosaicBg(col: 4, row: 0, opacity: 0.4),
+        flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/prayer_hero_v4.jpg'),
         title: Text(l10n.prayerTimesTitle),
         centerTitle: true,
         actions: [
@@ -448,9 +448,9 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         ],
       ),
       body: WirdiBrandBackground(
-        asset: 'assets/images/ui/home_scenery.jpg',
-        imageOpacity: 0.10,
-        imageHeight: 300,
+        asset: 'assets/images/ui/prayer_hero_v4.jpg',
+        imageOpacity: 0.84,
+        imageHeight: 460,
         child: ListView(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).padding.bottom),
         children: [
@@ -473,16 +473,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
               ),
             ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.primaryEmerald, Color(0xFF115E56)],
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-              ),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
+            height: 390,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(26),border: Border.all(color: AppColors.goldAccent.withValues(alpha:.55)),boxShadow:[BoxShadow(color:Colors.black.withValues(alpha:.12),blurRadius:22,offset:const Offset(0,10))]),
+            child: Stack(children:[
+              Positioned.fill(child:Image.asset('assets/images/ui/prayer_hero_v4.jpg',fit:BoxFit.cover)),
+              Positioned.fill(child:DecoratedBox(decoration:BoxDecoration(gradient:LinearGradient(begin:Alignment.topCenter,end:Alignment.bottomCenter,colors:[AppColors.darkBackground.withValues(alpha:.12),AppColors.darkBackground.withValues(alpha:.88)])))),
+              Padding(padding:const EdgeInsets.symmetric(vertical:22,horizontal:20),child: Column(
               children: [
                 if (result.locationLabel != null) ...[
                   Row(
@@ -569,7 +566,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                   ),
                 ],
               ],
-            ),
+            ),),
+            ]),
           ),
           const SizedBox(height: 20),
           ...result.prayers.map((prayer) {

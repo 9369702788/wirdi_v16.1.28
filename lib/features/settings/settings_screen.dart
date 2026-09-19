@@ -35,6 +35,7 @@ import '../../core/services/mathhab_service.dart';
 import '../../core/data/app_sources.dart';
 import '../../core/services/user_progress_service.dart';
 import '../../core/theme/app_theme.dart';
+import '../../shared/widgets/wirdi_brand.dart';
 import '../../l10n/generated/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -218,12 +219,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final l10n = AppLocalizations.of(context);
     final languageCode = Localizations.localeOf(context).languageCode;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settingsTitle), centerTitle: true),
+      appBar: AppBar(foregroundColor: Colors.white, flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/settings_hero_v4.jpg'), title: Text(l10n.settingsTitle), centerTitle: true),
       body: ListenableBuilder(
         listenable: appSettings,
         builder: (context, _) {
-          return ListView(padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).padding.bottom),
+          return ListView(padding: EdgeInsets.fromLTRB(0, 0, 0, 16 + MediaQuery.of(context).padding.bottom),
             children: [
+              WirdiScenicHero(asset: 'assets/images/ui/settings_hero_v4.jpg', title: l10n.settingsTitle, subtitle: languageCode == 'ar' ? 'هوية وردي الجديدة' : 'Wirdi visual identity', height: 150),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Column(children: [
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -1112,6 +1115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               ),
+              ]),
             ],
           );
         },

@@ -5,6 +5,7 @@ import '../../core/services/auth_service.dart';
 import 'login_screen.dart';
 import '../../core/services/sync_service.dart';
 import '../../core/theme/app_theme.dart';
+import '../../shared/widgets/wirdi_brand.dart';
 import '../../l10n/generated/app_localizations.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -148,9 +149,11 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         title: Text(l.authAccount),
         foregroundColor: Colors.white,
-        flexibleSpace: _MosaicBg(col: 2, row: 0, opacity: 0.35),
+        flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/profile_hero_v4.jpg'),
       ),
-      body: ListView(padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).padding.bottom), children: [
+      body: ListView(padding: EdgeInsets.fromLTRB(0, 0, 0, 16 + MediaQuery.of(context).padding.bottom), children: [
+        WirdiScenicHero(asset: 'assets/images/ui/profile_hero_v4.jpg', title: l.authAccount, subtitle: l.aboutTagline, height: 150),
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Column(children: [
         if (user == null)
           // Previously this card still rendered with a blank email and a
           // generic 'U' avatar when nobody was signed in -- indistinguishable
@@ -247,7 +250,9 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
         Card(child: ListTile(leading: const Icon(Icons.logout_rounded, color: Colors.red), title: Text(l.authSignOut, style: const TextStyle(color: Colors.red)), onTap: _signOut)),
-      ]),
+        ]),
+      ),
+      ],
     );
   }
 }

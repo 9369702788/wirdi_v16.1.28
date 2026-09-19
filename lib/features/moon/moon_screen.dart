@@ -45,14 +45,14 @@ class _MoonScreenState extends State<MoonScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        flexibleSpace: _MosaicBg(col: 1, row: 1, opacity: 0.5),
+        flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/moon_hero_v4.jpg'),
         title: Text(isAr ? 'القمر وأطواره' : 'Moon Phase'),
         centerTitle: true,
       ),
       body: WirdiBrandBackground(
-        asset: 'assets/images/ui/moon_night.jpg',
-        imageOpacity: 0.13,
-        imageHeight: 360,
+        asset: 'assets/images/ui/moon_hero_v4.jpg',
+        imageOpacity: 0.84,
+        imageHeight: 460,
         darken: true,
         child: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -61,9 +61,13 @@ class _MoonScreenState extends State<MoonScreen> {
               children: [
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(gradient: LinearGradient(colors: [AppColors.primaryEmerald, const Color(0xFF115E56)]), borderRadius: BorderRadius.circular(16)),
-                  child: Column(children: [
+                  height: 330,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(26),border:Border.all(color:AppColors.goldAccent.withValues(alpha:.55))),
+                  child: Stack(children:[
+                    Positioned.fill(child:Image.asset('assets/images/ui/moon_hero_v4.jpg',fit:BoxFit.cover)),
+                    Positioned.fill(child:DecoratedBox(decoration:BoxDecoration(gradient:LinearGradient(begin:Alignment.topCenter,end:Alignment.bottomCenter,colors:[Colors.transparent,AppColors.darkBackground.withValues(alpha:.90)])))),
+                    Padding(padding:const EdgeInsets.all(20),child: Column(children: [
                     Text(isAr ? 'طور القمر اليوم' : "Today's Moon Phase", style: const TextStyle(color: Colors.white70, fontSize: 13)),
                     const SizedBox(height: 12),
                     if (sighting != null)
@@ -74,7 +78,8 @@ class _MoonScreenState extends State<MoonScreen> {
                       ),
                     const SizedBox(height: 12),
                     Text(sighting?.description ?? '', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                  ]),
+                  ])),
+                ]),
                 ),
                 const SizedBox(height: 12),
                 Container(

@@ -103,7 +103,7 @@ class _QiblaScreenState extends State<QiblaScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        flexibleSpace: _MosaicBg(col: 0, row: 1, opacity: 0.4),
+        flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/qibla_hero_v4.jpg'),
         title: Text(l10n.qiblaTitle),
         centerTitle: true,
         actions: [
@@ -115,11 +115,14 @@ class _QiblaScreenState extends State<QiblaScreen> {
         ],
       ),
       body: WirdiBrandBackground(
-        asset: 'assets/images/ui/kaaba_night.jpg',
-        imageOpacity: 0.08,
-        imageHeight: 420,
+        asset: 'assets/images/ui/qibla_hero_v4.jpg',
+        imageOpacity: 0.88,
+        imageHeight: 520,
         darken: true,
-        child: _buildBody(l10n),
+        child: Column(children:[
+          WirdiScenicHero(asset:'assets/images/ui/qibla_hero_v4.jpg',title:l10n.qiblaTitle,subtitle:Localizations.localeOf(context).languageCode=='ar'?'اتجاه القبلة بدقة':'Accurate Qibla direction',height:150),
+          Expanded(child:_buildBody(l10n)),
+        ]),
       ),
     );
   }

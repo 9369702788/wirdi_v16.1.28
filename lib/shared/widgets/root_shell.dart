@@ -19,6 +19,7 @@ import '../../features/quran/quran_screen.dart';
 import '../../features/azkar/azkar_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/radio/radio_screen.dart';
+import 'wirdi_brand.dart';
 
 class _WirdiNavItem extends StatelessWidget {
   final String label;
@@ -203,7 +204,7 @@ class _RootShellState extends State<RootShell> with WidgetsBindingObserver {
           height: 72,
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.97),
+            color: const Color(0xFFF8F9F6).withValues(alpha: 0.98),
             borderRadius: BorderRadius.circular(26),
             border: Border.all(color: AppColors.primaryEmerald.withValues(alpha: 0.10)),
             boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.10), blurRadius: 22, offset: const Offset(0, 8))],

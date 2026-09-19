@@ -274,450 +274,102 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
     final l10n = AppLocalizations.of(context);
     final languageCode = Localizations.localeOf(context).languageCode;
     final wirdProgress = _wirdTarget == 0 ? 0.0 : (_pagesToday / _wirdTarget).clamp(0.0, 1.0);
-    final moonAge = MoonCalculator.moonAgeDays(DateTime.now());
-    final moonPhaseName = MoonCalculator.phaseName(moonAge, arabic: languageCode == 'ar');
+    final now = DateTime.now();
+    final hijri = HijriDate.fromGregorian(now);
+    final gregorian = DateFormat('EEEE d MMMM y', languageCode).format(now);
+    final moonAge = MoonCalculator.moonAgeDays(now);
     final moonImageAsset = MoonCalculator.phaseImageAsset(moonAge);
+    final next = _prayer?.next;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(l10n.appTitle),
-        centerTitle: true,
-        backgroundColor: AppColors.darkBackground,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         foregroundColor: Colors.white,
-        flexibleSpace: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.darkBackground, AppColors.primaryEmerald],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-            ),
-          ),
-        ),
+        titleSpacing: 18,
+        title: Row(children: [
+          Container(width: 36,height:36,padding: const EdgeInsets.all(3),decoration: BoxDecoration(color: const Color(0xFFF7F4EA).withValues(alpha:.95),borderRadius: BorderRadius.circular(11)),child: Image.asset('assets/images/ui/wirdi_logo.png')),
+          const SizedBox(width: 9),
+          Text(l10n.appTitle,style:const TextStyle(fontWeight:FontWeight.w900)),
+        ]),
         actions: [
-          TextButton.icon(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IslamicToolsScreen())),
-            icon: const Icon(Icons.apps_outlined, color: Colors.white),
-            label: Text(l10n.homeIslamicTools, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
-          ),
-          IconButton(
-            tooltip: l10n.commonSettingsTooltip,
-            icon: const Icon(Icons.settings_outlined),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsScreen())),
-          ),
+          IconButton(icon: const Icon(Icons.settings_outlined), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsScreen()))),
         ],
       ),
-      body: Stack(
-        children: [
-          const Positioned.fill(
-            child: WirdiBrandBackground(
-              asset: 'assets/images/ui/home_scenery.jpg',
-              imageOpacity: 0.16,
-              imageHeight: 360,
+      body: Stack(children:[
+        const Positioned.fill(child: WirdiBrandBackground(asset:'assets/images/ui/home_hero_v4.jpg',imageOpacity:.86,imageHeight:520,darken:true)),
+        RefreshIndicator(
+          onRefresh:_loadAll,
+          child: ListView(padding: EdgeInsets.fromLTRB(0, 92, 0, 28 + MediaQuery.of(context).padding.bottom),children:[
+            WirdiScenicHero(
+              asset:'assets/images/ui/home_hero_v4.jpg',
+              title:_greeting(l10n),
+              subtitle:'${l10n.homeContinueToday}  •  ${hijri.toStringLocalized(languageCode)}',
+              showLogo:true,
+              height:205,
+              trailing:Container(padding:const EdgeInsets.symmetric(horizontal:10,vertical:7),decoration:BoxDecoration(color:Colors.black.withValues(alpha:.24),borderRadius:BorderRadius.circular(999)),child:Text(gregorian,style:const TextStyle(color:Colors.white,fontSize:10,fontWeight:FontWeight.w700))),
             ),
-          ),
-          RefreshIndicator(
-        onRefresh: _loadAll,
-        child: ListView(padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).padding.bottom),
-          children: [
-            Text(_greeting(l10n), style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
-            const SizedBox(height: 4),
-            Text(
-              _streak > 0 ? l10n.homeStreakDays(_streak) : l10n.homeContinueToday,
-              style: const TextStyle(color: AppColors.mutedText),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              l10n.homePrayersToday(_prayedCount, 5),
-              style: const TextStyle(color: AppColors.mutedText, fontSize: 12),
-            ),
-            if (_khatmaRatio > 0) ...[
-              const SizedBox(height: 2),
-              Semantics(
-                button: true,
-                label: l10n.homeKhatmaProgress((_khatmaRatio * 100).round()),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KhatmaTrackerScreen())),
-                child: GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const KhatmaTrackerScreen()),
-                ),
-                child: Text(
-                  l10n.homeKhatmaProgress((_khatmaRatio * 100).round()),
-                  style: const TextStyle(
-                    color: AppColors.mutedText,
-                    fontSize: 12,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-              ),
-            ],
-            const SizedBox(height: 6),
-            Builder(builder: (context) {
-              final now = DateTime.now();
-              final hijri = HijriDate.fromGregorian(now);
-              final gregorian = DateFormat('EEEE d MMMM y', languageCode).format(now);
-              return Text(
-                '$gregorian — ${hijri.toStringLocalized(languageCode)}',
-                style: const TextStyle(color: AppColors.mutedText, fontSize: 12),
-              );
-            }),
-            const SizedBox(height: 16),
-
-            WirdiBrandHero(
-              title: l10n.appTitle,
-              subtitle: l10n.aboutTagline,
-              backgroundAsset: 'assets/images/ui/home_scenery.jpg',
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MyWirdiScreen())),
-            ),
-            const SizedBox(height: 16),
-
-            Semantics(
-              button: true,
-              label: l10n.toolMyWirdiTitle,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MyWirdiScreen())),
-              child: GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MyWirdiScreen())),
-              child: Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryEmerald.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(color: AppColors.primaryEmerald.withValues(alpha: 0.15)),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 52,
-                      height: 52,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            value: _myWirdiPercent,
-                            strokeWidth: 5,
-                            backgroundColor: AppColors.primaryEmerald.withValues(alpha: 0.12),
-                            valueColor: AlwaysStoppedAnimation(AppColors.primaryEmerald),
-                          ),
-                          Text(
-                            '${(_myWirdiPercent * 100).round()}%',
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(l10n.homeMyWirdiCardTitle, style: const TextStyle(fontWeight: FontWeight.w700)),
-                          const SizedBox(height: 2),
-                          Text(
-                            _myWirdiPercent >= 1.0
-                                ? l10n.myWirdiCompleted
-                                : l10n.myWirdiRemaining((100 - (_myWirdiPercent * 100).round()).clamp(0, 100)),
-                            style: const TextStyle(fontSize: 12, color: AppColors.mutedText),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Icon(Icons.chevron_left, color: AppColors.mutedText),
-                  ],
-                ),
-              ),
-            ),
-            ),
-            const SizedBox(height: 16),
-
-            Builder(builder: (context) {
-              final currentHijri = HijriDate.fromGregorian(DateTime.now());
-              if (!currentHijri.isRamadan) return const SizedBox.shrink();
-              return Column(
-                children: [
-                  Semantics(
-                    button: true,
-                    label: l10n.homeRamadanBannerTitle(currentHijri.day),
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RamadanCompanionScreen())),
-                    child: GestureDetector(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RamadanCompanionScreen())),
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [Color(0xFF0B3D36), AppColors.primaryEmerald]),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.nightlight_round, color: AppColors.goldAccent, size: 28),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  l10n.homeRamadanBannerTitle(currentHijri.day),
-                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(l10n.homeRamadanBannerSubtitle, style: const TextStyle(color: Colors.white70, fontSize: 12)),
-                              ],
-                            ),
-                          ),
-                          const Icon(Icons.chevron_left, color: Colors.white70),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              );
-            }),
-
-            // Next prayer — real data from PrayerService, or a clear
-            // "unavailable" state, never a hardcoded placeholder.
-            Semantics(
-              button: true,
-              label: l10n.homeNextPrayerCardLabel,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrayerTimesScreen())),
-              child: GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrayerTimesScreen())),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Image.asset(
-                        'assets/images/generated/mosque_sunrise.png',
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.darkBackground.withValues(alpha: 0.78),
-                              AppColors.primaryEmerald.withValues(alpha: 0.78),
-                              AppColors.darkBackground.withValues(alpha: 0.58),
-                            ],
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(l10n.homeNextPrayer, style: const TextStyle(color: Colors.white70)),
-                    const SizedBox(height: 8),
-                    if (_prayer != null) ...[
-                      Text(prayerDisplayName(l10n, _prayer!.next.name), style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w700)),
-                      const SizedBox(height: 4),
-                      Text(l10n.homeInLabel(_countdown), style: TextStyle(color: AppColors.goldAccent, fontSize: 16)),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          ClipOval(
-                            child: Image.asset(
-                              moonImageAsset,
-                              width: 40,
-                              height: 40,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => const Icon(Icons.circle, size: 40, color: Colors.white54),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(moonPhaseName, style: const TextStyle(color: Colors.white70, fontSize: 13)),
-                        ],
-                      ),
-                      if (_prayer!.isFromCache)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 6),
-                          child: Text(l10n.homeCachedPrayerTimes, style: const TextStyle(color: Colors.white54, fontSize: 11)),
-                        ),
-                      if (_weather != null || _sunTimes != null) ...[
-                        const SizedBox(height: 14),
-                        Container(height: 1, color: Colors.white24),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            if (_weather != null)
-                              Column(children: [
-                                const Icon(Icons.wb_sunny_outlined, color: Colors.white70, size: 16),
-                                const SizedBox(height: 2),
-                                Text(_weather!.temperature, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12)),
-                              ]),
-                            if (_sunTimes != null) ...[
-                              Column(children: [
-                                const Icon(Icons.wb_twilight, color: Colors.white70, size: 16),
-                                const SizedBox(height: 2),
-                                Text(_fmtSunTime(_sunTimes!.sunrise), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12)),
-                              ]),
-                              Column(children: [
-                                const Icon(Icons.nightlight_round, color: Colors.white70, size: 16),
-                                const SizedBox(height: 2),
-                                Text(_fmtSunTime(_sunTimes!.sunset), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12)),
-                              ]),
-                            ],
-                          ],
-                        ),
-                      ],
-                    ] else if (_prayerFailed)
-                      Text(l10n.homeEnableLocationForPrayer, style: const TextStyle(color: Colors.white70, fontSize: 15))
-                    else
-                      const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white70),
-                      ),
-                      ],
-                    ),
-                  ),
-                  ],
-                ),
-              ),
-            ),
-            ),
-            const SizedBox(height: 16),
-
-            _DashboardCard(
-              icon: Icons.donut_large,
-              title: l10n.homeDailyWird,
-              subtitle: _pagesToday >= _wirdTarget
-                  ? l10n.homeWirdCompleted
-                  : l10n.homeWirdProgress(_pagesToday, _wirdTarget),
-              trailing: _MiniProgress(value: wirdProgress, l10n: l10n),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QuranScreen())),
-            ),
-            const SizedBox(height: 12),
-
-            _DashboardCard(
-              icon: Icons.bookmark_outline,
-              title: l10n.homeContinueReading,
-              subtitle: _lastReading == null
-                  ? l10n.homeNoLastReading
-                  : l10n.homeLastReadingSubtitle(
-                      _lastReading!['surahName'] as String? ?? '',
-                      _lastReading!['ayahNumber'] as int? ?? 0,
-                    ),
-              trailing: const Icon(Icons.chevron_left, color: AppColors.mutedText),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => QuranScreen(
-                    initialSurahNumber: _lastReading?['surahNumber'] as int?,
-                    initialAyah: _lastReading?['ayahNumber'] as int?,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            _DashboardCard(
-              icon: Icons.favorite_outline,
-              title: l10n.homeFavorites,
-              subtitle: _favoritesCount == 0 ? l10n.homeNoFavoritesYet : l10n.homeFavoritesSavedCount(_favoritesCount),
-              trailing: const Icon(Icons.chevron_left, color: AppColors.mutedText),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritesScreen())),
-            ),
-            const SizedBox(height: 12),
-
-            _DashboardCard(
-              icon: Icons.format_quote,
-              title: l10n.homeQuoteOfTheDay,
-              subtitle: DailyQuotes.forToday().displayFor(languageCode),
-              trailing: const SizedBox.shrink(),
-              onTap: null,
-            ),
-            const SizedBox(height: 20),
-
-            if (_weekSummary.isNotEmpty) ...[
-              Semantics(
-                button: true,
-                label: l10n.homeWeeklyInsightsCardLabel,
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const WirdiInsightsScreen())),
-                child: GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const WirdiInsightsScreen()),
-                ),
-                child: _WeekSummaryCard(summary: _weekSummary),
-              ),
-              ),
-              const SizedBox(height: 20),
-            ],
-            
-            const SizedBox(height: 12),
-            _DashboardCard(
-              icon: Icons.menu_book_outlined,
-              title: l10n.localeName == 'ar' ? 'آية اليوم' : 'Verse of the Day',
-              subtitle: '${VerseOfTheDayService.forToday().arabicText}\n${VerseOfTheDayService.forToday().surahName} - ${VerseOfTheDayService.forToday().ayahNumber}',
-              trailing: const Icon(Icons.chevron_left, color: AppColors.mutedText),
-              onTap: () {
-                final verse = VerseOfTheDayService.forToday();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => QuranScreen(initialSurahNumber: verse.surahNumber, initialAyah: verse.ayahNumber)),
-                );
-              },
-            ),
-            if (_hadithOfToday != null) ...[
-              const SizedBox(height: 12),
-              _DashboardCard(
-                icon: Icons.auto_stories_outlined,
-                title: '${l10n.homeHadithOfTheDay}${_hadithStreak > 1 ? '  \u{1F525} ${l10n.insightsDaysCount(_hadithStreak)}' : ''}',
-                subtitle: _hadithOfToday!.translatedText.isNotEmpty ? _hadithOfToday!.translatedText : _hadithOfToday!.arabicText,
-                subtitleMaxLines: 4,
-                trailing: IconButton(
-                  tooltip: l10n.homeShareHadith,
-                  icon: const Icon(Icons.share_outlined, color: AppColors.mutedText),
-                  onPressed: () {
-                    final text = '${_hadithOfToday!.arabicText}\n\n${_hadithOfToday!.translatedText}\n\n${l10n.homeHadithSource}';
-                    Share.share(text);
-                  },
-                ),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => HadithCollectionScreen(initialHadithNumber: _hadithOfToday!.number),
-                  ),
-                ),
-              ),
-            ],
-
-            Text(l10n.homeQuickActions, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-            const SizedBox(height: 10),
-            GridView.count(
-              crossAxisCount: 4,
-              crossAxisSpacing: 9,
-              mainAxisSpacing: 9,
-              childAspectRatio: 0.88,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                WirdiFeatureTile(icon: Icons.menu_book_outlined, label: l10n.navQuran, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QuranScreen())), highlighted: true),
-                WirdiFeatureTile(icon: Icons.favorite_outline, label: l10n.homeQuickAzkar, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AzkarScreen()))),
-                WirdiFeatureTile(icon: Icons.access_time, label: l10n.homeQuickPrayer, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrayerTimesScreen()))),
-                WirdiFeatureTile(icon: Icons.explore_outlined, label: l10n.homeQuickQibla, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QiblaScreen()))),
+            Padding(padding:const EdgeInsets.symmetric(horizontal:16),child:Column(children:[
+              if (_streak>0 || _prayedCount>0) ...[
+                WirdiGlassCard(padding:const EdgeInsets.symmetric(horizontal:16,vertical:12),child:Row(children:[
+                  Icon(Icons.local_fire_department_rounded,color:AppColors.goldAccent),const SizedBox(width:8),
+                  Expanded(child:Text(_streak>0?l10n.homeStreakDays(_streak):l10n.homeContinueToday,style:const TextStyle(fontWeight:FontWeight.w800))),
+                  Text(l10n.homePrayersToday(_prayedCount,5),style:const TextStyle(color:AppColors.mutedText,fontSize:11,fontWeight:FontWeight.w700)),
+                ])),
+                const SizedBox(height:12),
               ],
-            ),
-          ],
-            ),
-          ),
-        ],
-      ),
+              WirdiSectionTitle(title:l10n.homeQuickActions),
+              const SizedBox(height:10),
+              GridView.count(crossAxisCount:4,crossAxisSpacing:8,mainAxisSpacing:8,childAspectRatio:.86,shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),children:[
+                WirdiFeatureTile(icon:Icons.menu_book_outlined,label:l10n.navQuran,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const QuranScreen())),highlighted:true),
+                WirdiFeatureTile(icon:Icons.volunteer_activism_outlined,label:l10n.homeQuickAzkar,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const AzkarScreen()))),
+                WirdiFeatureTile(icon:Icons.access_time_rounded,label:l10n.homeQuickPrayer,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const PrayerTimesScreen()))),
+                WirdiFeatureTile(icon:Icons.explore_outlined,label:l10n.homeQuickQibla,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const QiblaScreen()))),
+              ]),
+              const SizedBox(height:14),
+              WirdiGlassCard(padding:EdgeInsets.zero,child:ClipRRect(borderRadius:BorderRadius.circular(22),child:Stack(children:[
+                Image.asset('assets/images/ui/home_hero_v4.jpg',height:176,width:double.infinity,fit:BoxFit.cover),
+                Container(height:176,decoration:BoxDecoration(gradient:LinearGradient(begin:Alignment.topCenter,end:Alignment.bottomCenter,colors:[Colors.transparent,AppColors.darkBackground.withValues(alpha:.92)]))),
+                Positioned(left:16,right:16,bottom:14,child:Row(children:[
+                  Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(l10n.prayerNextPrayerLabel,style:const TextStyle(color:Colors.white70,fontSize:11,fontWeight:FontWeight.w700)),const SizedBox(height:3),Text(next==null?'--':prayerDisplayName(l10n,next.name),style:const TextStyle(color:Colors.white,fontSize:24,fontWeight:FontWeight.w900)),Text(next==null?'--:--':_countdown,style:TextStyle(color:AppColors.goldAccent,fontSize:15,fontWeight:FontWeight.w800))])),
+                  if (_sunTimes!=null) Column(children:[const Icon(Icons.wb_twilight,color:Colors.white70,size:17),Text(_fmtSunTime(_sunTimes!.sunset),style:const TextStyle(color:Colors.white,fontWeight:FontWeight.w800,fontSize:11))]),
+                ]),
+              ]))),
+              const SizedBox(height:14),
+              Row(children:[
+                Expanded(child:WirdiGlassCard(padding:const EdgeInsets.all(14),onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const QuranScreen(initialSurahNumber:null))),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+                  Row(children:[const Icon(Icons.auto_stories_outlined,color:AppColors.primaryEmerald),const Spacer(),Text('${(_khatmaRatio*100).round()}%',style:const TextStyle(fontWeight:FontWeight.w900,color:AppColors.primaryEmerald))]),
+                  const SizedBox(height:9),Text(l10n.homeContinueReading,style:const TextStyle(fontWeight:FontWeight.w800)),const SizedBox(height:4),Text(_lastReading==null?l10n.homeNoLastReading:l10n.homeLastReadingSubtitle(_lastReading!['surahName'] as String? ?? '',_lastReading!['ayahNumber'] as int? ?? 0),maxLines:2,overflow:TextOverflow.ellipsis,style:const TextStyle(fontSize:11,color:AppColors.mutedText)),
+                  const SizedBox(height:9),LinearProgressIndicator(value:_khatmaRatio,minHeight:5,borderRadius:BorderRadius.circular(99),color:AppColors.goldAccent,backgroundColor:AppColors.primaryEmerald.withValues(alpha:.10)),
+                ]))),
+                const SizedBox(width:10),
+                Expanded(child:WirdiGlassCard(padding:const EdgeInsets.all(14),onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const MyWirdiScreen())),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+                  Row(children:[const Icon(Icons.favorite_border,color:AppColors.primaryEmerald),const Spacer(),Text('${(_myWirdiPercent*100).round()}%',style:const TextStyle(fontWeight:FontWeight.w900,color:AppColors.primaryEmerald))]),
+                  const SizedBox(height:9),Text(l10n.homeMyWirdiCardTitle,style:const TextStyle(fontWeight:FontWeight.w800)),const SizedBox(height:4),Text(l10n.homeWirdProgress(_pagesToday,_wirdTarget),style:const TextStyle(fontSize:11,color:AppColors.mutedText)),
+                  const SizedBox(height:9),LinearProgressIndicator(value:_myWirdiPercent,minHeight:5,borderRadius:BorderRadius.circular(99),color:AppColors.primaryEmerald,backgroundColor:AppColors.primaryEmerald.withValues(alpha:.10)),
+                ]))),
+              ]),
+              const SizedBox(height:14),
+              WirdiGlassCard(padding:const EdgeInsets.all(15),child:Row(children:[
+                ClipOval(child:Image.asset(moonImageAsset,width:48,height:48,fit:BoxFit.cover,errorBuilder:(_,__,___)=>const Icon(Icons.nightlight_round,size:40))),
+                const SizedBox(width:12),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(moonPhaseName,style:const TextStyle(fontWeight:FontWeight.w800)),const SizedBox(height:3),Text(languageCode=='ar'?'أطوار القمر اليوم':'Today’s moon phase',style:const TextStyle(color:AppColors.mutedText,fontSize:11))])),
+                const Icon(Icons.chevron_left,color:AppColors.mutedText),
+              ])),
+              if (_hadithOfToday!=null) ...[const SizedBox(height:14),WirdiGlassCard(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Row(children:[const Icon(Icons.auto_stories_rounded,color:AppColors.goldAccent),const SizedBox(width:8),Expanded(child:Text(l10n.homeHadithOfTheDay,style:const TextStyle(fontWeight:FontWeight.w800))),IconButton(onPressed:()=>Share.share('${_hadithOfToday!.arabicText}\n\n${_hadithOfToday!.translatedText}'),icon:const Icon(Icons.share_outlined))]),const SizedBox(height:7),Text(_hadithOfToday!.translatedText.isNotEmpty?_hadithOfToday!.translatedText:_hadithOfToday!.arabicText,maxLines:4,overflow:TextOverflow.ellipsis,style:const TextStyle(height:1.45,fontSize:12.5))]))],
+              const SizedBox(height:14),
+              WirdiGlassCard(child:Row(children:[const Icon(Icons.format_quote,color:AppColors.primaryEmerald),const SizedBox(width:10),Expanded(child:Text(DailyQuotes.forToday().displayFor(languageCode),maxLines:3,overflow:TextOverflow.ellipsis,style:const TextStyle(fontWeight:FontWeight.w700,height:1.4)))])),
+              const SizedBox(height:14),
+              WirdiGlassCard(onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>QuranScreen(initialSurahNumber:VerseOfTheDayService.forToday().surahNumber,initialAyah:VerseOfTheDayService.forToday().ayahNumber))),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(languageCode=='ar'?'آية اليوم':'Verse of the Day',style:const TextStyle(fontWeight:FontWeight.w800)),const SizedBox(height:7),Text(VerseOfTheDayService.forToday().arabicText,maxLines:3,overflow:TextOverflow.ellipsis,textAlign:TextAlign.right,style:const TextStyle(fontSize:15,height:1.6)),const SizedBox(height:5),Text('${VerseOfTheDayService.forToday().surahName} • ${VerseOfTheDayService.forToday().ayahNumber}',style:const TextStyle(color:AppColors.mutedText,fontSize:11))]),
+              ),
+            ])),
+          ]),
+        ),
+      ]),
     );
   }
 }
+
 class _DashboardCard extends StatelessWidget {
   final IconData icon;
   final String title;
