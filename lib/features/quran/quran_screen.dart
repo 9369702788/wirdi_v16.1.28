@@ -92,7 +92,6 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
       appBar: AppBar(
         foregroundColor: Colors.white,
         flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/quran_hero_v4.jpg'),
-        title: Directionality(textDirection: TextDirection.rtl, child: Text(l10n.quranTitle)),
         centerTitle: true,
         actions: [
           IconButton(

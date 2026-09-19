@@ -257,6 +257,7 @@ class AppTheme {
         shadowColor: Colors.black.withValues(alpha: 0.08),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(def.cardRadius),
+          side: BorderSide(color: def.accent.withValues(alpha: 0.22)),
         ),
       ),
       textTheme: base.textTheme.apply(
@@ -330,6 +331,7 @@ class AppTheme {
         shadowColor: Colors.black.withValues(alpha: 0.08),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(def.cardRadius),
+          side: BorderSide(color: def.accent.withValues(alpha: 0.30)),
         ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

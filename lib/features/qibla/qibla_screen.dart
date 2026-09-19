@@ -104,7 +104,6 @@ class _QiblaScreenState extends State<QiblaScreen> {
       appBar: AppBar(
         foregroundColor: Colors.white,
         flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/qibla_hero_v4.jpg'),
-        title: Text(l10n.qiblaTitle),
         centerTitle: true,
         actions: [
           IconButton(

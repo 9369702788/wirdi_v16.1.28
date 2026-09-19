@@ -97,7 +97,7 @@ class _RadioScreenState extends State<RadioScreen>
                     const TextStyle(fontSize: 18),
                 onChanged: (v) => setState(() => _query = v),
               )
-            : Text(l.radioTitle),
+            : null,
         actions: [
           if (_searching)
             IconButton(

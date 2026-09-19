@@ -197,7 +197,7 @@ class WirdiGlassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surface = color ?? Theme.of(context).colorScheme.surface.withValues(alpha: 0.94);
-    final border = AppColors.primaryEmerald.withValues(alpha: 0.10);
+    final border = AppColors.goldAccent.withValues(alpha: 0.24);
     final card = Container(
       decoration: BoxDecoration(
         color: surface,
@@ -262,6 +262,7 @@ class WirdiFeatureTile extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
   final bool highlighted;
+  final bool useGoldAccent;
 
   const WirdiFeatureTile({
     super.key,
@@ -269,13 +270,16 @@ class WirdiFeatureTile extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.highlighted = false,
+    this.useGoldAccent = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final primary = AppColors.primaryEmerald;
+    final accentColor = useGoldAccent ? AppColors.goldAccent : primary;
+    final fgOnHighlight = useGoldAccent ? AppColors.darkBackground : Colors.white;
     return Material(
-      color: highlighted ? primary : Theme.of(context).colorScheme.surface.withValues(alpha: 0.94),
+      color: highlighted ? accentColor : Theme.of(context).colorScheme.surface.withValues(alpha: 0.94),
       borderRadius: BorderRadius.circular(20),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
@@ -285,7 +289,7 @@ class WirdiFeatureTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: primary.withValues(alpha: highlighted ? 0.0 : 0.10)),
+            border: Border.all(color: AppColors.goldAccent.withValues(alpha: highlighted ? 0.0 : 0.18)),
             boxShadow: [
               BoxShadow(color: Colors.black.withValues(alpha: 0.035), blurRadius: 12, offset: const Offset(0, 5)),
             ],
@@ -293,7 +297,7 @@ class WirdiFeatureTile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: highlighted ? Colors.white : primary, size: 27),
+              Icon(icon, color: highlighted ? fgOnHighlight : primary, size: 27),
               const SizedBox(height: 7),
               Text(
                 label,
@@ -303,7 +307,7 @@ class WirdiFeatureTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w700,
-                  color: highlighted ? Colors.white : null,
+                  color: highlighted ? fgOnHighlight : null,
                 ),
               ),
             ],

@@ -55,7 +55,6 @@ class _AzkarScreenState extends State<AzkarScreen> with SingleTickerProviderStat
       appBar: AppBar(
         foregroundColor: Colors.white,
         flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/azkar_hero_v4.jpg'),
-        title: Text(l10n.azkarDuasTitle),
         centerTitle: true,
         bottom: TabBar(
           controller: _tabController,

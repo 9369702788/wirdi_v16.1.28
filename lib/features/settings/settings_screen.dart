@@ -219,7 +219,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final l10n = AppLocalizations.of(context);
     final languageCode = Localizations.localeOf(context).languageCode;
     return Scaffold(
-      appBar: AppBar(foregroundColor: Colors.white, flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/settings_hero_v4.jpg'), title: Text(l10n.settingsTitle), centerTitle: true),
+      appBar: AppBar(foregroundColor: Colors.white, flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/settings_hero_v4.jpg'), centerTitle: true),
       body: ListenableBuilder(
         listenable: appSettings,
         builder: (context, _) {

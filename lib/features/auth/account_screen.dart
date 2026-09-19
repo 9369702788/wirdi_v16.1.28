@@ -147,7 +147,6 @@ class _AccountScreenState extends State<AccountScreen> {
     final lastSync = SyncService.instance.lastSyncAt;
     return Scaffold(
       appBar: AppBar(
-        title: Text(l.authAccount),
         foregroundColor: Colors.white,
         flexibleSpace: const WirdiAppBarBackground(asset: 'assets/images/ui/profile_hero_v4.jpg'),
       ),

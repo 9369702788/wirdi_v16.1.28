@@ -323,9 +323,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
               const SizedBox(height:10),
               GridView.count(crossAxisCount:4,crossAxisSpacing:8,mainAxisSpacing:8,childAspectRatio:.86,shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),children:[
                 WirdiFeatureTile(icon:Icons.menu_book_outlined,label:l10n.navQuran,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const QuranScreen())),highlighted:true),
-                WirdiFeatureTile(icon:Icons.volunteer_activism_outlined,label:l10n.homeQuickAzkar,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const AzkarScreen()))),
-                WirdiFeatureTile(icon:Icons.access_time_rounded,label:l10n.homeQuickPrayer,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const PrayerTimesScreen()))),
-                WirdiFeatureTile(icon:Icons.explore_outlined,label:l10n.homeQuickQibla,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const QiblaScreen()))),
+                WirdiFeatureTile(icon:Icons.volunteer_activism_outlined,label:l10n.homeQuickAzkar,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const AzkarScreen())),highlighted:true,useGoldAccent:true),
+                WirdiFeatureTile(icon:Icons.access_time_rounded,label:l10n.homeQuickPrayer,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const PrayerTimesScreen())),highlighted:true),
+                WirdiFeatureTile(icon:Icons.explore_outlined,label:l10n.homeQuickQibla,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const QiblaScreen())),highlighted:true,useGoldAccent:true),
+              ]),
+              const SizedBox(height:14),
+              WirdiSectionTitle(title:l10n.navMore),
+              const SizedBox(height:10),
+              GridView.count(crossAxisCount:3,crossAxisSpacing:8,mainAxisSpacing:8,childAspectRatio:.92,shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),children:[
+                WirdiFeatureTile(icon:Icons.grid_view_rounded,label:l10n.homeIslamicTools,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const IslamicToolsScreen())),highlighted:true),
+                WirdiFeatureTile(icon:Icons.auto_stories_rounded,label:l10n.hadithTitle,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const HadithCollectionScreen())),highlighted:true,useGoldAccent:true),
+                WirdiFeatureTile(icon:Icons.favorite_rounded,label:l10n.homeFavorites,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const FavoritesScreen())),highlighted:true),
+                WirdiFeatureTile(icon:Icons.insights_rounded,label:l10n.homeWeeklyInsightsCardLabel,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const WirdiInsightsScreen())),highlighted:true,useGoldAccent:true),
+                WirdiFeatureTile(icon:Icons.flag_rounded,label:l10n.toolKhatmaTitle,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const KhatmaTrackerScreen())),highlighted:true),
+                WirdiFeatureTile(icon:Icons.nights_stay_rounded,label:l10n.toolRamadanTitle,onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const RamadanCompanionScreen())),highlighted:true,useGoldAccent:true),
               ]),
               const SizedBox(height:14),
               WirdiGlassCard(padding:EdgeInsets.zero,child:ClipRRect(borderRadius:BorderRadius.circular(22),child:Stack(children:[

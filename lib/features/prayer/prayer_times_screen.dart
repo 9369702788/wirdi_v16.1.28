@@ -473,7 +473,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
               ),
             ),
           Container(
-            height: 390,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(26),border: Border.all(color: AppColors.goldAccent.withValues(alpha:.55)),boxShadow:[BoxShadow(color:Colors.black.withValues(alpha:.12),blurRadius:22,offset:const Offset(0,10))]),
             child: Stack(children:[
