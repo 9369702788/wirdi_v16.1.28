@@ -335,7 +335,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                   Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(l10n.prayerNextPrayerLabel,style:const TextStyle(color:Colors.white70,fontSize:11,fontWeight:FontWeight.w700)),const SizedBox(height:3),Text(next==null?'--':prayerDisplayName(l10n,next.name),style:const TextStyle(color:Colors.white,fontSize:24,fontWeight:FontWeight.w900)),Text(next==null?'--:--':_countdown,style:TextStyle(color:AppColors.goldAccent,fontSize:15,fontWeight:FontWeight.w800))])),
                   if (_sunTimes!=null) Column(children:[const Icon(Icons.wb_twilight,color:Colors.white70,size:17),Text(_fmtSunTime(_sunTimes!.sunset),style:const TextStyle(color:Colors.white,fontWeight:FontWeight.w800,fontSize:11))]),
                 ]),
-              ]))),
+              )]))),
               const SizedBox(height:14),
               Row(children:[
                 Expanded(child:WirdiGlassCard(padding:const EdgeInsets.all(14),onTap:()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const QuranScreen(initialSurahNumber:null))),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
@@ -353,7 +353,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
               const SizedBox(height:14),
               WirdiGlassCard(padding:const EdgeInsets.all(15),child:Row(children:[
                 ClipOval(child:Image.asset(moonImageAsset,width:48,height:48,fit:BoxFit.cover,errorBuilder:(_,__,___)=>const Icon(Icons.nightlight_round,size:40))),
-                const SizedBox(width:12),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(moonPhaseName,style:const TextStyle(fontWeight:FontWeight.w800)),const SizedBox(height:3),Text(languageCode=='ar'?'أطوار القمر اليوم':'Today’s moon phase',style:const TextStyle(color:AppColors.mutedText,fontSize:11))])),
+                const SizedBox(width:12),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(MoonCalculator.phaseName(moonAge, arabic: languageCode == 'ar'),style:const TextStyle(fontWeight:FontWeight.w800)),const SizedBox(height:3),Text(languageCode=='ar'?'أطوار القمر اليوم':'Today’s moon phase',style:const TextStyle(color:AppColors.mutedText,fontSize:11))])),
                 const Icon(Icons.chevron_left,color:AppColors.mutedText),
               ])),
               if (_hadithOfToday!=null) ...[const SizedBox(height:14),WirdiGlassCard(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Row(children:[const Icon(Icons.auto_stories_rounded,color:AppColors.goldAccent),const SizedBox(width:8),Expanded(child:Text(l10n.homeHadithOfTheDay,style:const TextStyle(fontWeight:FontWeight.w800))),IconButton(onPressed:()=>Share.share('${_hadithOfToday!.arabicText}\n\n${_hadithOfToday!.translatedText}'),icon:const Icon(Icons.share_outlined))]),const SizedBox(height:7),Text(_hadithOfToday!.translatedText.isNotEmpty?_hadithOfToday!.translatedText:_hadithOfToday!.arabicText,maxLines:4,overflow:TextOverflow.ellipsis,style:const TextStyle(height:1.45,fontSize:12.5))]))],

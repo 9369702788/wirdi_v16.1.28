@@ -128,7 +128,7 @@ class _AzkarScreenState extends State<AzkarScreen> with SingleTickerProviderStat
                 ],
               );
             },
-          }))),
+          ))),
           ],
         ),
         ],
